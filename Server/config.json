@@ -1,0 +1,27 @@
+﻿{
+    "database": {
+        "host": "localhost",
+        "port": 3306,
+        "user": "root",
+        "password": "gal2004",
+        "database": "gals-fantasy-league"
+    },
+    "secret": ">3c;4:pn~7'MTUw*",
+    "emailFrom": "gal.aharoni00@gmail.com",
+    "smtpOptions": {
+        "host": "smtp.sendgrid.net",
+        "port": 587,
+        "auth": {
+            "user": "apikey",
+            "pass": "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"
+        }
+    },
+    "smtpOptionsBack": {
+        "host": "smtp.ethereal.email",
+        "port": 587,
+        "auth": {
+            "user": "effie.huel90@ethereal.email",
+            "pass": "xv6aN6zXUbqNsvGMWb"
+        }
+    }    
+}
