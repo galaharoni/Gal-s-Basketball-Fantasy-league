@@ -19,8 +19,8 @@ function AddEdit({ history, match }) {
     };
 
     const validationSchema = Yup.object().shape({
-        currentDate: Yup.string()
-            .required('current date is required')
+        /*currentDate: Yup.string()
+            .required('current date is required')*/
     });
 
     function onSubmit(fields, { setStatus, setSubmitting }) {
@@ -47,12 +47,7 @@ function AddEdit({ history, match }) {
                 useEffect(() => {
                     // get current date and set form fields
                     gameDateService.getById(id).then(gameDate => {
-                        const fields = ['currentDate'];
-                        fields.forEach(field => setFieldValue(field, gameDate[field], false));                        
-                        //TODO: init calendar with currentDate
-                        //setStartDate(Moment(gameDate.currentDate));
-                        //alert(startDate);
-                        //setStartDate(null);            
+                        setStartDate(new Date(gameDate.currentDate))          
                     });
                 }, []);
 
@@ -63,9 +58,7 @@ function AddEdit({ history, match }) {
                         <div className="form-row">
                             <div className="form-group col-5">
                                 <label>Current Date</label>
-                                <Field name="currentDate" type="text" className={'form-control' + (errors.currentDate && touched.currentDate ? ' is-invalid' : '')} />
-                                <ErrorMessage name="currentDate" component="div" className="invalid-feedback" />
-                                <DatePicker dateFormat='dd/MM/yyyy' selected={startDate ? startDate : moment()} onChange={(date) => setStartDate(date)} />
+                                <DatePicker name="currentDate" dateFormat='dd/MM/yyyy' selected={startDate ? startDate : moment()} onChange={(date) => setStartDate(date)} className={'form-control' + (errors.currentDate && touched.currentDate ? ' is-invalid' : '')}/>
                             </div>
                         </div>
                         <div className="form-group">
