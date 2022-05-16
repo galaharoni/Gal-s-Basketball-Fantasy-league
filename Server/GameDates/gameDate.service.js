@@ -42,6 +42,7 @@ async function create() {
     }
 
     const gameDate = new db.gameDate();
+    gameDate.currentDate='2021-05-05';
     
     // save league
     await gameDate.save();

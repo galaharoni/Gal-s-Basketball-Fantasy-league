@@ -68,6 +68,12 @@ function List({ match }) {
         history.push(`${path}`)
     }
 
+    function toTeamPlayers(){
+        playerService.teamPlayersValue = true;        
+        history.push(`${path}`)
+    }
+
+
     return (        
         <div>
             {teamPlayers?<h1>Team Players</h1>:<h1>Free Agents</h1>}
@@ -89,8 +95,11 @@ function List({ match }) {
                 </tbody>
             </table>                                
             </h5>
-            {teamPlayers && viewLeauge && viewLeauge.leagueMode=="Draft"?<button onClick={() => freeAgents()} className="btn btn-sm btn-success" style={{ whiteSpace: 'nowrap' }} disabled={false}>
-                <span>Signe Free Agents</span>
+            {teamPlayers && viewLeauge && viewLeauge.leagueMode=="Draft"?<button onClick={() => freeAgents()} className="btn btn-sm btn-success" style={{ whiteSpace: 'nowrap' }} disabled={team.accountId!=accountService.userValue.id}>
+                <span>Sign Free Agents</span>
+            </button>:""}
+            {!teamPlayers?<button onClick={() => toTeamPlayers()} className="btn btn-sm btn-info" style={{ whiteSpace: 'nowrap' }}>
+                <span>Back</span>
             </button>:""}
             <table className="table table-striped">
                 <thead>
@@ -117,7 +126,7 @@ function List({ match }) {
                             <td>{parseFloat(player.avgSteals).toFixed(2)}</td>
                             <td>{parseFloat(player.avgBlocks).toFixed(2)}</td>
                             <td>{parseFloat(player.avgTurnovers).toFixed(2)}</td>
-                            <td>{player? player.grade == "null" : parseFloat(player.grade).toFixed(2)}</td>
+                            <td>{parseFloat(player.grade).toFixed(2)}</td>
                             <td>{player? player.worth == "null" : parseFloat(player.worth).toFixed(2)}</td>
                             <td style={{ whiteSpace: 'nowrap' }}>
                                 <button onClick={() => selectPlayer(player.id)} className="btn btn-sm btn-danger" disabled={player.isDeleting || (false)}>

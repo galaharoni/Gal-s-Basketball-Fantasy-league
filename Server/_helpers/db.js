@@ -40,20 +40,29 @@ async function initialize() {
     db.Team.belongsTo(db.Account);
 
     // one leagues has many teams
-    db.Team.belongsTo(db.League, { foreignKey: 'leagueId'});
     db.League.hasMany(db.Team, { onDelete: 'CASCADE', foreignKey: 'leagueId'});
+    db.Team.belongsTo(db.League, { foreignKey: 'leagueId'});
 
     // one leagues has many players
-    db.Player.belongsTo(db.League, { foreignKey: 'leagueId'});
     db.League.hasMany(db.Player, { onDelete: 'CASCADE',  foreignKey: 'leagueId'});
+    db.Player.belongsTo(db.League, { foreignKey: 'leagueId'});
 
     // one team has many players
+    db.Team.hasMany(db.Player, {foreignKey: 'teamId'});    
     db.Player.belongsTo(db.Team, { foreignKey: 'teamId'});
-    db.Team.hasMany(db.Player, {foreignKey: 'teamId'});
-
-    
+        
     // sync all models with database
     await sequelize.sync();
+
+    //create  players index if it does not exist
+    let sqlTxt =
+    'SELECT * FROM `INFORMATION_SCHEMA`.`STATISTICS` \
+    WHERE `TABLE_SCHEMA` = \'gals-fantasy-league\' AND `TABLE_NAME` = \'players\' AND `INDEX_NAME` = \'players_league_id_player_id\'';
+
+    const [results, rowcnt] = await sequelize.query(sqlTxt);
+    
+    if(rowcnt==0)
+        sequelize.getQueryInterface().addIndex('players', ['leagueId', 'playerId']);
 
     const gameDateService = require('../GameDates/gameDate.service');
     gameDateService.create();    

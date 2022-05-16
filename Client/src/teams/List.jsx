@@ -62,7 +62,7 @@ function List({ match }) {
         <div>
             {isMyTeams?<h1>My Teams</h1>:<h1> Teams of league: {viewLeauge?viewLeauge.leagueName:""}</h1>}
             {isMyTeams?<br></br>:<h4>Leauge Mode: {viewLeauge?viewLeauge.leagueMode:""}</h4>}             
-            {!isMyTeams && myTeam && myTeam.length===0 && viewLeauge && viewLeauge.teamsCount > teams.length ?<button onClick={() => joinLeague(leagueid)} className="btn btn-sm btn-success" style={{ whiteSpace: 'nowrap' }} disabled={false}>
+            {!isMyTeams && myTeam && myTeam.length===0 && viewLeauge && teams && viewLeauge.teamsCount > teams.length ?<button onClick={() => joinLeague(leagueid)} className="btn btn-sm btn-success" style={{ whiteSpace: 'nowrap' }} disabled={false}>
                 <span>Join League</span>
             </button>:<div></div>}
             <table className="table table-striped">
@@ -78,7 +78,7 @@ function List({ match }) {
                     {teams && teams.map(team =>
                         <tr key={team.id}>
                             <td style={{ whiteSpace: 'nowrap' }}>{isMyTeams&&team?team.League.leagueName: team.account.firstName + " " + team.account.lastName}</td>
-                            <td>{team.draftPeak}</td>
+                            <td>{team.draftPick}</td>
                             <td>{team.budget}</td>
                             <td style={{ whiteSpace: 'nowrap' }}>
                                 <button onClick={() => viewTeam(team)} className="btn btn-sm btn-info" style={{ width: '60px' }}>View</button>

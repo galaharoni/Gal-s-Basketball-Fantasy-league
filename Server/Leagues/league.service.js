@@ -1,8 +1,8 @@
 ﻿const bcrypt = require('bcryptjs');
 const db = require('_helpers/db');
 const randomTokenString = require('_helpers/randomTokenString');
-const teamService = require('../Teams//team.service');
-const playerService = require('../Players//player.service');
+const teamService = require('../Teams/team.service');
+const playerService = require('../Players/player.service');
 const LeagueMode = require('_helpers/leagueMode');
 
 module.exports = {
@@ -53,7 +53,7 @@ async function create(req) {
     if (!newLeague) throw 'League not found';
 
     //add team of league owner to the leauge
-    await teamService.joinLeague(newLeague.id, req.user.id);
+    await teamService.create(newLeague.id, req.user.id);
 }
 
 
@@ -74,7 +74,7 @@ async function update(id, params) {
     await league.save();
 
     //initiate draft if manually moved to draft
-    if (params.leagueMode = LeagueMode.Draft){
+    if (params.leagueMode == LeagueMode.Draft){
         setDraft(league);
     }
 }
@@ -86,8 +86,6 @@ async function _delete(id) {
 
 
 async function setDraft(league) {
-    //create league players
-    await playerService.createLeaguePlayers(league.id);
     //create draft draw
     var arr = [];
     while(arr.length < league.teamsCount){
@@ -95,9 +93,19 @@ async function setDraft(league) {
         if(arr.indexOf(r) === -1) arr.push(r);
     }
     console.log('draft pick:' + arr);
-
+    
     //Set pick
-    //Todo:update teams with pick from arr
+    teams = await teamService.getByLeague(league.id);
+    const unresolved = teams.map(async(team, idx) => {
+        console.log('initDraft id:'+team.id + ' pick:'+arr[idx]);
+        await teamService.initDraft(team.id,arr[idx])
+        }
+    )
+
+    const resolved = await Promise.all(unresolved);
+
+    //create league players
+    await playerService.createLeaguePlayers(league.id);
 }
 
 // helper functions
