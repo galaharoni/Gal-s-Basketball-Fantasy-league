@@ -14,10 +14,8 @@ function model(sequelize) {
         avgTurnovers:  { type: DataTypes.DOUBLE, allowNull: true },
         avgPoints:  { type: DataTypes.DOUBLE, allowNull: true },   
         grade:  { type: DataTypes.DOUBLE, allowNull: true },
-        worth:  { type: DataTypes.DOUBLE, allowNull: true }   
-
+        worth:  { type: DataTypes.DOUBLE, allowNull: true }
     };
-
     const options = {
         defaultScope: {
             // all fields

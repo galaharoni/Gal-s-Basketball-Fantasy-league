@@ -23,5 +23,9 @@
             "user": "effie.huel90@ethereal.email",
             "pass": "xv6aN6zXUbqNsvGMWb"
         }
-    }    
+    },    
+    "teamBudget":{
+        "budget": 250000000,
+        "maxPlayerValue": 50000000
+    }
 }

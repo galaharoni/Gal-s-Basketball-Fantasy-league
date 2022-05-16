@@ -2,8 +2,8 @@
 const router = express.Router();
 const Joi = require('joi');
 const validateRequest = require('_middleware/validate-request');
-const Role = require('_helpers/role');
 const teamService = require('./team.service');
+const teamManager = require('./team.manager');
 const authorize = require('_middleware/authorize');
 
 // routes
@@ -69,7 +69,7 @@ function _delete(req, res, next) {
 }
 
 function joinLeague(req, res, next) {
-    teamService.joinLeague(req.params.id, req.user.id)
+    teamManager.joinLeague(req.params.id, req.user.id)
         .then(() => res.json({ message: 'Joined league' }))
         .catch(next);
 }

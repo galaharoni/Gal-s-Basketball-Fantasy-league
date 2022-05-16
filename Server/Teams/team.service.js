@@ -1,7 +1,5 @@
-﻿const bcrypt = require('bcryptjs');
-const db = require('_helpers/db');
-const LeagueMode = require('_helpers/leagueMode');
-const leagueService = require('../Leagues/league.service');
+﻿const db = require('_helpers/db');
+const config = require('config.json');
 
 module.exports = {
     getAll,
@@ -11,36 +9,15 @@ module.exports = {
     create,
     update,
     delete: _delete,
-    joinLeague,
-    getByLeagueNaccount
+    initDraft,
+    getByLeagueNaccount,
+    getTeamsCount
 };
 
-async function joinLeague(leagueId, accountId) {
-    // Validate same account not added to a league again
-    if (await db.Team.findOne({ where: { leagueId: leagueId, accountId:accountId} })) {
-        throw 'Owner ' + accountId + ' already has a team in league ' + leagueId;
-    }
-
-    // Validate number of teams does not exceed max teams
-    let currentTeamsCount = await getTeamsCount(leagueId);
-    const league = await leagueService.getById(leagueId);
-    
-    if (currentTeamsCount >= league.teamsCount)
-        throw 'League ' + leagueId + ' already has the max teams count: ' + league.teamsCount;
-
-    const team = new db.Team();
-    team.leagueId = leagueId;
-    team.accountId = accountId; 
-
-    // save team
+async function setDraftPeak(id, draftPeak) {
+    const team = await getTeam(id);
+    team.draftPick = draftPeak;
     await team.save();
-
-    // when adding the last team, change status to draft and create players
-    if (currentTeamsCount == league.teamsCount-1) {
-        league.leagueMode = LeagueMode.Draft;
-        league.save();   
-        leagueService.setDraft(leagueId);
-    }    
 }
 
 async function getTeamsCount(leagueId) {
@@ -86,17 +63,12 @@ async function getById(id) {
     return await getTeam(id);
 }
 
-async function create(req) {
-    // validate
-    
-    params = req.body;
-    
-
-
-    const team = new db.Team(params);
-    
+async function create(leagueId, accountId) {
     // Teams
     //TODO: limit teams by number of players / 10
+    const team = new db.Team();
+    team.leagueId = leagueId;
+    team.accountId = accountId; 
 
     // save team
     await team.save();
@@ -122,14 +94,20 @@ async function update(id, params) {
 }
 
 async function _delete(id) {
-    const user = await getTeam(id);
-    await user.destroy();
+    const team = await getTeam(id);
+    await team.destroy();
 }
-
-// helper functions
 
 async function getTeam(id) {
     const team = await db.Team.findByPk(id);
     if (!team) throw 'Team not found';
     return team;
+}
+
+async function initDraft(id, draftPick) {
+    const {budget} = config.teamBudget;
+    const team = await getTeam(id);
+    team.draftPick = draftPick;
+    team.budget = budget;
+    await team.save();
 }
