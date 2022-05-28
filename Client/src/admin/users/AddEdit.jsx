@@ -5,6 +5,11 @@ import * as Yup from 'yup';
 
 import { accountService, alertService } from '@/_services';
 
+/**
+ * AddEdit: Add or Edit a user
+ * @param {*} param0 
+ * @returns 
+ */
 function AddEdit({ history, match }) {
     const { id } = match.params;
     const isAddMode = !id;
@@ -18,7 +23,7 @@ function AddEdit({ history, match }) {
         password: '',
         confirmPassword: ''
     };
-
+    // validtion rules
     const validationSchema = Yup.object().shape({
         title: Yup.string()
             .required('Title is required'),
@@ -40,7 +45,11 @@ function AddEdit({ history, match }) {
             })
             .oneOf([Yup.ref('password')], 'Passwords must match')
     });
-
+    /**
+     * onSubmit: Submit the form. Create or update the user
+     * @param {*} fields 
+     * @param {*} param1 
+     */
     function onSubmit(fields, { setStatus, setSubmitting }) {
         setStatus();
         if (isAddMode) {
@@ -50,6 +59,11 @@ function AddEdit({ history, match }) {
         }
     }
 
+    /**
+     * createUser: create the user
+     * @param {*} fields 
+     * @param {*} setSubmitting 
+     */
     function createUser(fields, setSubmitting) {
         accountService.create(fields)
             .then(() => {
@@ -61,7 +75,12 @@ function AddEdit({ history, match }) {
                 alertService.error(error);
             });
     }
-
+    /**
+     * updateUser: update the user
+     * @param {*} id 
+     * @param {*} fields 
+     * @param {*} setSubmitting 
+     */
     function updateUser(id, fields, setSubmitting) {
         accountService.update(id, fields)
             .then(() => {
@@ -74,6 +93,9 @@ function AddEdit({ history, match }) {
             });
     }
 
+    /**
+     * Generate HTML for the form
+     */
     return (
         <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={onSubmit}>
             {({ errors, touched, isSubmitting, setFieldValue }) => {
@@ -86,7 +108,7 @@ function AddEdit({ history, match }) {
                         });
                     }
                 }, []);
-
+                // return the html for the form
                 return (
                     <Form>
                         <h1>{isAddMode ? 'Add User' : 'Edit User'}</h1>

@@ -5,6 +5,11 @@ import * as Yup from 'yup';
 
 import { accountService, alertService } from '@/_services';
 
+/**
+ * Register: display the register page
+ * @param {*} param0 
+ * @returns 
+ */
 function Register({ history }) {
     const initialValues = {
         title: '',
@@ -15,7 +20,7 @@ function Register({ history }) {
         confirmPassword: '',
         acceptTerms: false
     };
-
+    // validtion rules
     const validationSchema = Yup.object().shape({
         title: Yup.string()
             .required('Title is required'),
@@ -36,6 +41,11 @@ function Register({ history }) {
             .oneOf([true], 'Accept Terms & Conditions is required')
     });
 
+    /**
+     * onSubmit: Submit the form for register account
+     * @param {*} fields 
+     * @param {*} param1 
+     */
     function onSubmit(fields, { setStatus, setSubmitting }) {
         setStatus();
         accountService.register(fields)
@@ -49,6 +59,7 @@ function Register({ history }) {
             });
     }
 
+    //create the html for the register page
     return (
         <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={onSubmit}>
             {({ errors, touched, isSubmitting }) => (

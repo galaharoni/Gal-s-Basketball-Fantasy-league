@@ -1,6 +1,8 @@
 import config from 'config';
 import { accountService } from '@/_services';
-
+/**
+ * wrapper for sending request to the server and reciving responses in REST protocol
+ */
 export const fetchWrapper = {
     get,
     post,
@@ -8,6 +10,11 @@ export const fetchWrapper = {
     delete: _delete
 }
 
+/**
+ * get: Send REST api GET request
+ * @param {*} url 
+ * @returns 
+ */
 function get(url) {
     const requestOptions = {
         method: 'GET',
@@ -16,6 +23,12 @@ function get(url) {
     return fetch(url, requestOptions).then(handleResponse);
 }
 
+/**
+ * post: Send REST api POST request
+ * @param {*} url 
+ * @param {*} body 
+ * @returns 
+ */
 function post(url, body) {
     const requestOptions = {
         method: 'POST',
@@ -26,6 +39,12 @@ function post(url, body) {
     return fetch(url, requestOptions).then(handleResponse);
 }
 
+/**
+ * put: Send REST api PUT request
+ * @param {*} url 
+ * @param {*} body 
+ * @returns 
+ */
 function put(url, body) {
     const requestOptions = {
         method: 'PUT',
@@ -58,6 +77,11 @@ function authHeader(url) {
     }
 }
 
+/**
+ * handle respons from the server
+ * @param {*} response 
+ * @returns 
+ */
 function handleResponse(response) {
     return response.text().then(text => {
         const data = text && JSON.parse(text);

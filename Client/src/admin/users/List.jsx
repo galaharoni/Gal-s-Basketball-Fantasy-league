@@ -2,15 +2,25 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 
 import { accountService } from '@/_services';
-
+/**
+ * display list of users
+ * @param {*} param0 
+ * @returns 
+ */
 function List({ match }) {
     const { path } = match;
     const [users, setUsers] = useState(null);
-
+    /**
+     * load players
+     */ 
     useEffect(() => {
         accountService.getAll().then(x => setUsers(x));
     }, []);
 
+    /**
+     * deleteUser: delete user by id 
+     * @param {*} id 
+     */
     function deleteUser(id) {
         setUsers(users.map(x => {
             if (x.id === id) { x.isDeleting = true; }
@@ -21,6 +31,9 @@ function List({ match }) {
         });
     }
 
+    /**
+     * generate html table of users
+     */
     return (
         <div>
             <h1>Users</h1>

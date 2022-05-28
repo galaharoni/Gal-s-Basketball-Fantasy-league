@@ -4,6 +4,11 @@ import { Route, Switch } from 'react-router-dom';
 import { Details } from './Details';
 import { Update } from './Update';
 
+/**
+ * Profile: routing to/from profile
+ * @param {*} param0 
+ * @returns 
+ */
 function Profile({ match }) {
     const { path } = match;
     

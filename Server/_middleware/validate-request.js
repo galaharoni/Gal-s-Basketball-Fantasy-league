@@ -1,5 +1,10 @@
 module.exports = validateRequest;
-
+/**
+ * validateRequest:
+ * @param  {} req
+ * @param  {} next
+ * @param  {} schema
+ */
 function validateRequest(req, next, schema) {
     const options = {
         abortEarly: false, // include all errors

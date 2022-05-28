@@ -1,16 +1,19 @@
 const { DataTypes } = require('sequelize');
 
 module.exports = model;
-
+/**
+ * model: league model
+ * defindes the attributes of the model
+ * @param  {} sequelize
+ */
 function model(sequelize) {
     const attributes = {
         leagueName: { type: DataTypes.STRING, allowNull: false },
         rounds: { type: DataTypes.INTEGER, allowNull: false },
+        currentRound: { type: DataTypes.INTEGER, allowNull: true },
         teamsCount: { type: DataTypes.INTEGER, allowNull: false },
-        substitutionCycle: { type: DataTypes.INTEGER, allowNull: false },
-        leagueCode: { type: DataTypes.STRING, allowNull: true },
-        publicLeague: { type: DataTypes.BOOLEAN, allowNull: false },
-        leagueMode: { type: DataTypes.STRING, allowNull: false }
+        leagueMode: { type: DataTypes.STRING, allowNull: false },
+        pickingTeam: { type: DataTypes.INTEGER, allowNull: true }
     };
 
     const options = {

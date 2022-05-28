@@ -5,6 +5,11 @@ import { Overview } from './Overview';
 import { Users } from './users';
 import { GameDates } from './gameDates';
 
+/**
+ * routing to/from admin
+ * @param {*} param0 
+ * @returns 
+ */
 function Admin({ match }) {
     const { path } = match;    
 

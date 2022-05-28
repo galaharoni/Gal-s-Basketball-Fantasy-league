@@ -5,10 +5,16 @@ import * as Yup from 'yup';
 
 import { leagueService, alertService } from '@/_services';
 
+/**
+ * AddEdit: Add or Edit a league
+ * @param {*} param0 
+ * @returns 
+ */
 function AddEdit({ history, match }) {
     const { id } = match.params;
     const isAddMode = !id;
     
+    //initial Values for the fields
     const initialValues = {
         leagueName: '',
         rounds: '',
@@ -18,19 +24,21 @@ function AddEdit({ history, match }) {
         leagueMode: 'Create'
     };
 
+    // validation rules
     const validationSchema = Yup.object().shape({
         leagueName: Yup.string()
             .required('Name is required'),
         rounds: Yup.string()
             .required('Rounds is required'),
         teamsCount: Yup.string()
-            .required('Max Teams Count is required'),
-        substitutionCycle: Yup.string()
-            .required('Substitution Cycle required'),
-        publicLeague: Yup.string()
-            .required('Public League is required')
+            .required('Max Teams Count is required')
     });
 
+    /**
+     * onSubmit: Submit the form. Create or update the league according to the form mode
+     * @param {*} fields 
+     * @param {*} param1 
+     */
     function onSubmit(fields, { setStatus, setSubmitting }) {
         setStatus();
         if (isAddMode) {
@@ -39,7 +47,11 @@ function AddEdit({ history, match }) {
             updateLeague(id, fields, setSubmitting);
         }
     }
-
+    /**
+     * createLeague: submit data to create the league
+     * @param {*} fields 
+     * @param {*} setSubmitting 
+     */
     function createLeague(fields, setSubmitting) {
         leagueService.create(fields)
             .then(() => {
@@ -51,7 +63,12 @@ function AddEdit({ history, match }) {
                 alertService.error(error);
             });
     }
-
+    /**
+     * updateLeague: Submit data to update the leauge
+     * @param {*} id 
+     * @param {*} fields 
+     * @param {*} setSubmitting 
+     */
     function updateLeague(id, fields, setSubmitting) {
         leagueService.update(id, fields)
             .then(() => {
@@ -63,7 +80,9 @@ function AddEdit({ history, match }) {
                 alertService.error(error);
             });
     }
-
+    /**
+     * Generate HTML for the form
+     */
     return (
         <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={onSubmit}>
             {({ errors, touched, isSubmitting, setFieldValue }) => {
@@ -98,30 +117,9 @@ function AddEdit({ history, match }) {
                                 <Field name="teamsCount" type="text" className={'form-control' + (errors.teamsCount && touched.teamsCount ? ' is-invalid' : '')} />
                                 <ErrorMessage name="teamsCount" component="div" className="invalid-feedback" />
                             </div>
-                            <div className="form-group col-2">
-                                <label>Substitution Cycle</label>
-                                <Field name="substitutionCycle" type="text" className={'form-control' + (errors.substitutionCycle && touched.substitutionCycle ? ' is-invalid' : '')} />
-                                <ErrorMessage name="substitutionCycle" component="div" className="invalid-feedback" />
-                            </div>                            
-                            <div className="form-group col-2">
-                                <label>Public League</label>
-                                <Field name="publicLeague" as="select" className={'form-control' + (errors.publicLeague && touched.publicLeague ? ' is-invalid' : '')}>
-                                    <option value="true" defaultValue={true}>Yes</option>
-                                    <option value="false">No</option>
-                                </Field>
-                                <ErrorMessage name="publicLeague" component="div" className="invalid-feedback" />                               
-                            </div>
-                            </div>
-                        <div className="form-row">
                             <div className="form-group col-4">
                                 <label>Mode</label>
-                                <Field name="leagueMode" as="select" disabled={isAddMode} className={'form-control' + (errors.leagueMode && touched.leagueMode ? ' is-invalid' : '')}>
-                                    <option value="Create">Create</option>
-                                    <option value="Draft">Draft</option>
-                                    <option value="Run">Run</option>
-                                    <option value="Substitutaions">Substitutaions</option>                                        
-                                    <option value="Close">Close</option>
-                                </Field>
+                                <Field name="leagueMode" type="text" disabled="true" className={'form-control' + (errors.leagueMode && touched.leagueMode ? ' is-invalid' : '')} />
                                 <ErrorMessage name="leagueMode" component="div" className="invalid-feedback" />
                             </div>
                         </div>

@@ -4,6 +4,11 @@ import Moment from 'moment';
 
 import { gameDateService } from '@/_services';
 
+/**
+ * List: display list of game dates
+ * @param {*} param0 
+ * @returns 
+ */
 function List({ match }) {
     const { path } = match;
     const [gameDates, setGameDates] = useState(null);
@@ -12,7 +17,9 @@ function List({ match }) {
     useEffect(() => {
         gameDateService.getAll().then(x => setGameDates(x));
     }, []);
-
+    /**
+     * generate html table of game dates
+     */
     return (
         <div>
             <h1>Game Dates</h1>
@@ -20,6 +27,7 @@ function List({ match }) {
                 <thead>
                     <tr>
                         <th style={{ width: '30%' }}>Current Date</th>
+                        <th style={{ width: '30%' }}>End Date</th>
                         <th style={{ width: '10%' }}></th>
                     </tr>
                 </thead>
@@ -27,6 +35,7 @@ function List({ match }) {
                     {gameDates && gameDates.map(gameDate =>
                         <tr key={gameDate.id}>
                             <td>{Moment(gameDate.currentDate).format('DD-MM-YYYY')}</td>
+                            <td>{Moment(gameDate.endDate).format('DD-MM-YYYY')}</td>
                             <td style={{ whiteSpace: 'nowrap' }}>
                                 <Link to={`${path}/edit/${gameDate.id}`} className="btn btn-sm btn-primary mr-1">Edit</Link>
                             </td>

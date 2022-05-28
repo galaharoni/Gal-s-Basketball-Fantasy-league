@@ -1,3 +1,7 @@
+/**
+ * module for showing mesagess to the users after calling the server
+ */
+
 import { Subject } from 'rxjs';
 import { filter } from 'rxjs/operators';
 
@@ -30,15 +34,16 @@ function onAlert(id = defaultId) {
 function success(message, options) {
     alert({ ...options, type: AlertType.Success, message });
 }
-
+// showing error message
 function error(message, options) {
     alert({ ...options, type: AlertType.Error, message });
 }
 
+// showing info message
 function info(message, options) {
     alert({ ...options, type: AlertType.Info, message });
 }
-
+// showing warn message
 function warn(message, options) {
     alert({ ...options, type: AlertType.Warning, message });
 }

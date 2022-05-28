@@ -4,6 +4,11 @@ import { Route, Switch } from 'react-router-dom';
 import { List } from './List';
 import { AddEdit } from './AddEdit';
 
+/**
+ * routing to/from user
+ * @param {*} param0 
+ * @returns 
+ */
 function Users({ match }) {
     const { path } = match;    
     

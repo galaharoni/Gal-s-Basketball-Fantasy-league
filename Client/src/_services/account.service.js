@@ -123,6 +123,9 @@ function startRefreshTokenTimer() {
     refreshTokenTimeout = setTimeout(refreshToken, timeout);
 }
 
+/**
+ * 
+ */
 function stopRefreshTokenTimer() {
     clearTimeout(refreshTokenTimeout);
 }

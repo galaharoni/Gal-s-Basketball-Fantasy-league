@@ -8,6 +8,9 @@ const leagueIdSubject = new BehaviorSubject(null);
 
 const baseUrl = `${config.apiUrl}/teams`;
 
+/**
+ * team service interface
+ */
 export const teamService = {
     getAll,
     getById,
@@ -26,34 +29,83 @@ export const teamService = {
     set teamValue (team) {teamSubject.next(team);},    
 };
 
+// route functions
+/**
+ * getAll: return all teams
+ * @param  {} req
+ * @param  {} res
+ * @param  {} next
+ */
 function getAll() {
     return fetchWrapper.get(baseUrl);
 }
 
+/**
+ * getById: get team by id
+ * @param  {} req
+ * @param  {} res
+ * @param  {} next
+ */
 function getById(id) {
     return fetchWrapper.get(`${baseUrl}/${id}`);
 }
 
+/**
+ * getByLeague: get teams of a league
+ * @param  {} req
+ * @param  {} res
+ * @param  {} next
+ */
 function getByLeague(leagueId) {
     return fetchWrapper.get(`${baseUrl}/league/${leagueId}`);
 }
 
+/**
+ * getByLeagueNaccount: get team of a specific account in a specific league
+ * @param  {} req: request
+ * @param  {} res: response
+ * @param  {} next: errors
+ */
 function getByLeagueNaccount(leagueId) {
     return fetchWrapper.get(`${baseUrl}/league/account/${leagueId}`);
 }
 
+/**
+ * getByAccount: get teams by account
+ * @param  {} req
+ * @param  {} res
+ * @param  {} next
+ */
 function getByAccount(accountId) {
     return fetchWrapper.get(`${baseUrl}/account/${accountId}`);
 }
 
+/**
+ * create: create a new team
+ * @param  {} req
+ * @param  {} res
+ * @param  {} next
+ */
 function create(params) {
     return fetchWrapper.post(baseUrl, params);
 }
 
+/**
+ * update: update the team
+ * @param  {} req
+ * @param  {} res
+ * @param  {} next
+ */
 function update(id, params) {
     return fetchWrapper.put(`${baseUrl}/${id}`, params);
 }
 
+/**
+ * joinLeague: create team in league
+ * @param  {} req
+ * @param  {} res
+ * @param  {} next
+ */
 function joinLeague(id) {
     return fetchWrapper.put(`${baseUrl}/league/${id}`);
 }

@@ -12,6 +12,10 @@ import { Admin } from '@/admin';
 import { Account } from '@/account';
 import { Players } from '@/players';
 
+/**
+ * App: routes requests to the web site modules
+ * @returns 
+ */
 function App() {
     const { pathname } = useLocation();  
     const [user, setUser] = useState({});

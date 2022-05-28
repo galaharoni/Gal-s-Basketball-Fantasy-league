@@ -5,17 +5,26 @@ import * as Yup from 'yup';
 
 import { accountService, alertService } from '@/_services';
 
+/**
+ * ForgotPassword: display forgot password page
+ * @returns 
+ */
 function ForgotPassword() {
     const initialValues = {
         email: ''
     };
-
+    // validation rules
     const validationSchema = Yup.object().shape({
         email: Yup.string()
             .email('Email is invalid')
             .required('Email is required')
     });
 
+    /**
+     * onSubmit: Submit the form to sent forgot password email 
+     * @param {*} param0 
+     * @param {*} param1 
+     */
     function onSubmit({ email }, { setSubmitting }) {
         alertService.clear();
         accountService.forgotPassword(email)
@@ -24,6 +33,7 @@ function ForgotPassword() {
             .finally(() => setSubmitting(false));
     }
 
+    // create the html for the forgot password page
     return (
         <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={onSubmit}>
             {({ errors, touched, isSubmitting }) => (

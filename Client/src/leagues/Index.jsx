@@ -5,6 +5,11 @@ import { List } from './List';
 import { AddEdit } from './AddEdit';
 import { Teams } from '../teams';
 
+/**
+ * routing to/from leagues
+ * @param {*} param0 
+ * @returns 
+ */
 function Leagues({ match }) {
     const { path } = match;
     

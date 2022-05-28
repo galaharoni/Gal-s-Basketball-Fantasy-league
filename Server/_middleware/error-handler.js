@@ -1,5 +1,11 @@
 module.exports = errorHandler;
-
+/**
+ * errorHandler:
+ * @param  {} err
+ * @param  {} req
+ * @param  {} res
+ * @param  {} next
+ */
 function errorHandler(err, req, res, next) {
     switch (true) {
         case typeof err === 'string':
