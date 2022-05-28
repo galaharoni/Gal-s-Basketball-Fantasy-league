@@ -5,16 +5,22 @@ import * as Yup from 'yup';
 
 import { leagueService, alertService } from '@/_services';
 
+/**
+ * AddEdit: Add or Edit a league
+ * @param {*} param0 
+ * @returns 
+ */
 function AddEdit({ history, match }) {
     const { id } = match.params;
     const isAddMode = !id;
     
+    //initial Values for the fields
     const initialValues = {
         teamName: '',
         numOfPlayers: '',
         maxPlayers: 'True'
     };
-
+    // validation rules
     const validationSchema = Yup.object().shape({
         teamName: Yup.string()
             .required('Name is required'),
@@ -28,6 +34,11 @@ function AddEdit({ history, match }) {
             .required('Public League is required')
     });
 
+    /**
+     * onSubmit: Submit the form. Create or update the team
+     * @param {*} fields 
+     * @param {*} param1 
+     */
     function onSubmit(fields, { setStatus, setSubmitting }) {
         setStatus();
         if (isAddMode) {
@@ -37,6 +48,11 @@ function AddEdit({ history, match }) {
         }
     }
 
+    /**
+     * createLeague: submit data to create the league
+     * @param {*} fields 
+     * @param {*} setSubmitting 
+     */
     function createLeague(fields, setSubmitting) {
         leagueService.create(fields)
             .then(() => {
@@ -49,6 +65,12 @@ function AddEdit({ history, match }) {
             });
     }
 
+     /**
+     * updateLeague: Submit data to update the leauge
+     * @param {*} id 
+     * @param {*} fields 
+     * @param {*} setSubmitting 
+     */
     function updateLeague(id, fields, setSubmitting) {
         leagueService.update(id, fields)
             .then(() => {
@@ -60,7 +82,9 @@ function AddEdit({ history, match }) {
                 alertService.error(error);
             });
     }
-
+    /**
+     * Generate HTML for the form
+     */
     return (
         <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={onSubmit}>
             {({ errors, touched, isSubmitting, setFieldValue }) => {

@@ -5,6 +5,11 @@ import * as Yup from 'yup';
 
 import { accountService, alertService } from '@/_services';
 
+/**
+ * Update: update the profile
+ * @param {*} param0 
+ * @returns 
+ */
 function Update({ history }) {
     const user = accountService.userValue;
     const initialValues = {
@@ -15,7 +20,7 @@ function Update({ history }) {
         password: '',
         confirmPassword: ''
     };
-
+    // validation rules
     const validationSchema = Yup.object().shape({
         title: Yup.string()
             .required('Title is required'),
@@ -35,6 +40,11 @@ function Update({ history }) {
             .oneOf([Yup.ref('password')], 'Passwords must match')
     });
 
+    /**
+     * onSubmit: submiting the form
+     * @param {*} fields 
+     * @param {*} param1 
+     */
     function onSubmit(fields, { setStatus, setSubmitting }) {
         setStatus();
         accountService.update(user.id, fields)
@@ -49,6 +59,9 @@ function Update({ history }) {
     }
 
     const [isDeleting, setIsDeleting] = useState(false);
+    /**
+     * onDelete: deleting the account 
+     */
     function onDelete() {
         if (confirm('Are you sure?')) {
             setIsDeleting(true);
@@ -57,6 +70,9 @@ function Update({ history }) {
         }
     }
 
+      /**
+     * generate html table of profile
+     */
     return (
         <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={onSubmit}>
             {({ errors, touched, isSubmitting }) => (

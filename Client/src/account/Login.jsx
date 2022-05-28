@@ -5,12 +5,17 @@ import * as Yup from 'yup';
 
 import { accountService, alertService } from '@/_services';
 
+/**
+ * Login: display login page
+ * @param {*} param0 
+ * @returns 
+ */
 function Login({ history, location }) {
     const initialValues = {
         email: '',
         password: ''
     };
-
+    // validtion rules
     const validationSchema = Yup.object().shape({
         email: Yup.string()
             .email('Email is invalid')
@@ -18,6 +23,11 @@ function Login({ history, location }) {
         password: Yup.string().required('Password is required')
     });
 
+    /**
+     * onSubmit: Submit the form for login
+     * @param {*} param0 
+     * @param {*} param1 
+     */
     function onSubmit({ email, password }, { setSubmitting }) {
         alertService.clear();
         accountService.login(email, password)
@@ -30,7 +40,7 @@ function Login({ history, location }) {
                 alertService.error(error);
             });
     }
-
+    // create html for the login page
     return (
         <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={onSubmit}>
             {({ errors, touched, isSubmitting }) => (

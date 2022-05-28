@@ -9,6 +9,11 @@ import { VerifyEmail } from './VerifyEmail';
 import { ForgotPassword } from './ForgotPassword';
 import { ResetPassword } from './ResetPassword';
 
+/**
+ * Account: routing to/from accounts
+ * @param {*} param0 
+ * @returns 
+ */
 function Account({ history, match }) {
     const { path } = match;
 
@@ -18,7 +23,7 @@ function Account({ history, match }) {
             history.push('/');
         }
     }, []);
-
+    // routing
     return (
         <div className="container">
             <div className="row">

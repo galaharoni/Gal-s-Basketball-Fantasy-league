@@ -4,6 +4,11 @@ import { Route, Switch } from 'react-router-dom';
 import { Overview } from './Overview';
 import { Leagues } from '../leagues';
 
+/**
+ * routing to/from home
+ * @param {*} param0 
+ * @returns 
+ */
 function Home({ match }) {
     const { path } = match;
 

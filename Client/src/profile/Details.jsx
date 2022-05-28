@@ -2,7 +2,11 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 
 import { accountService } from '@/_services';
-
+/**
+ * Details: the details of the account
+ * @param {*} param0 
+ * @returns 
+ */
 function Details({ match }) {
     const { path } = match;
     const user = accountService.userValue;

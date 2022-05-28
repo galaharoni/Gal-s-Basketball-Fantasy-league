@@ -7,17 +7,29 @@ import { accountService } from '@/_services';
 import { teamService } from '@/_services';
 
 
-
+/**
+ * List: display list of leagues
+ * @param {*} param0 
+ * @returns 
+ */
 function List({ match }) {
     const { path } = match;
     const [leagues, setLeagues] = useState(null);
     const user = accountService.userValue;
     const history = useHistory();
 
+    /**
+     * load leagues
+     */ 
     useEffect(() => {
         leagueService.getAll().then(x => setLeagues(x));
-    }, []);
+    }, [location.key]);
 
+    /**
+     * deleteLeague: delete a league by id
+     * @param {*} id 
+     * @returns 
+     */
     function deleteLeague(id) {
         if (window.confirm('Are you sure you wish to delete this league?')===false)
             return
@@ -30,12 +42,20 @@ function List({ match }) {
         });
     }
 
+    /**
+     * viewTeams: route to teams of a specific league
+     * @param {*} leagueId 
+     */
     function viewTeams(leagueId){
         teamService.leagueIdValue = leagueId;
         history.push(`${path}/teams`)
     }
     
-
+    /**
+     * showButtons: show delete button for league owner and view teams button for everyone
+     * @param {*} league 
+     * @returns 
+     */
     function showButtons(league) {
             return (
                 <td style={{ whiteSpace: 'nowrap' }}>                    
@@ -50,7 +70,9 @@ function List({ match }) {
                         <button onClick={() => viewTeams(league.id)} className="btn btn-sm btn-info">View</button>                        
                 </td>)
     }
-
+    /**
+     * generate html table of leagues
+     */
     return (
         <div>
             <h1>Leagues</h1>
@@ -58,11 +80,10 @@ function List({ match }) {
             <table className="table table-striped">
                 <thead>
                     <tr>
-                        <th style={{ width: '40%' }}>Name</th>
+                        <th style={{ width: '20%' }}>Name</th>
                         <th style={{ width: '10%' }}>Rounds</th>
-                        <th style={{ width: '10%' }}>Max Teams Count</th>
-                        <th style={{ width: '10%' }}>Substitution Cycle</th>                        
-                        <th style={{ width: '10%' }}>Public League</th>                        
+                        <th style={{ width: '10%' }}>Current Round</th>
+                        <th style={{ width: '10%' }}>Max Teams Count</th>                                                
                         <th style={{ width: '10%' }}>League Mode</th>                        
                         <th style={{ width: '10%' }}>Owner</th>                        
                         <th style={{ width: '10%' }}></th>
@@ -73,9 +94,8 @@ function List({ match }) {
                         <tr key={league.id}>
                             <td>{league.leagueName}</td>
                             <td>{league.rounds}</td>
+                            <td>{league.currentRound ? league.currentRound : ""}</td>
                             <td>{league.teamsCount}</td>
-                            <td>{league.substitutionCycle}</td>
-                            <td>{league.publicLeague ? "Yes" : "No"}</td>     
                             <td>{league.leagueMode}</td>                            
                             <td style={{ whiteSpace: 'nowrap' }}>{league.account.firstName + " " + league.account.lastName}</td>                            
                             {showButtons(league)}

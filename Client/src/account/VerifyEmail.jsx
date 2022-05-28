@@ -4,6 +4,11 @@ import queryString from 'query-string';
 
 import { accountService, alertService } from '@/_services';
 
+/**
+ * VerifyEmail: display the verify email page
+ * @param {*} param0 
+ * @returns 
+ */
 function VerifyEmail({ history }) {
     const EmailStatus = {
         Verifying: 'Verifying',
@@ -11,7 +16,7 @@ function VerifyEmail({ history }) {
     }
 
     const [emailStatus, setEmailStatus] = useState(EmailStatus.Verifying);
-
+    // loading the page data
     useEffect(() => {
         const { token } = queryString.parse(location.search);
 
@@ -28,6 +33,11 @@ function VerifyEmail({ history }) {
             });
     }, []);
 
+    /**
+     * getBody: display the body of the page according to the email status
+     * if the verification failed, for example the token expired, the user can go to forgot password page 
+     * @returns 
+     */
     function getBody() {
         switch (emailStatus) {
             case EmailStatus.Verifying:
@@ -36,7 +46,7 @@ function VerifyEmail({ history }) {
                 return <div>Verification failed, you can also verify your account using the <Link to="forgot-password">forgot password</Link> page.</div>;
         }
     }
-
+    // create html for the verify email page
     return (
         <div>
             <h3 className="card-header">Verify Email</h3>

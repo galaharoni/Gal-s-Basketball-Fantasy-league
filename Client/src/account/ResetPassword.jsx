@@ -6,6 +6,11 @@ import * as Yup from 'yup';
 
 import { accountService, alertService } from '@/_services';
 
+/**
+ * ResetPassword: display reset password page
+ * @param {*} param0 
+ * @returns 
+ */
 function ResetPassword({ history }) {
     const TokenStatus = {
         Validating: 'Validating',
@@ -16,12 +21,15 @@ function ResetPassword({ history }) {
     const [token, setToken] = useState(null);
     const [tokenStatus, setTokenStatus] = useState(TokenStatus.Validating);
 
+    //loading the page
     useEffect(() => {
+        //get the token from the url
         const { token } = queryString.parse(location.search);
 
         // remove token from url to prevent http referer leakage
         history.replace(location.pathname);
 
+        // call the server to validate the token
         accountService.validateResetToken(token)
             .then(() => {
                 setToken(token);
@@ -31,13 +39,16 @@ function ResetPassword({ history }) {
                 setTokenStatus(TokenStatus.Invalid);
             });
     }, []);
-
+    /**
+    * getForm: generate the form when the token is valid
+    * @returns 
+    */
     function getForm() {
         const initialValues = {
             password: '',
             confirmPassword: ''
         };
-
+        //validtion rules
         const validationSchema = Yup.object().shape({
             password: Yup.string()
                 .min(6, 'Password must be at least 6 characters')
@@ -47,6 +58,11 @@ function ResetPassword({ history }) {
                 .required('Confirm Password is required'),
         });
 
+        /**
+         * onSubmit: Submit the form to reset password
+         * @param {*} param0 
+         * @param {*} param1 
+         */
         function onSubmit({ password, confirmPassword }, { setSubmitting }) {
             alertService.clear();
             accountService.resetPassword({ token, password, confirmPassword })
@@ -59,7 +75,7 @@ function ResetPassword({ history }) {
                     alertService.error(error);
                 });
         }
-
+        //create the html for the reset password page when the token is valid
         return (
             <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={onSubmit}>
                 {({ errors, touched, isSubmitting }) => (
@@ -89,6 +105,11 @@ function ResetPassword({ history }) {
         );
     }
 
+    /**
+     * getBody: display the body of the page according to the token status.
+     * the token from the email has an expiration date, and if the token is invalid the user can go to forgot password again.
+     * @returns 
+     */
     function getBody() {
         switch (tokenStatus) {
             case TokenStatus.Valid:
@@ -100,6 +121,9 @@ function ResetPassword({ history }) {
         }
     }
 
+    /**
+     * generate html of the reset password
+     */
     return (
         <div>
             <h3 className="card-header">Reset Password</h3>

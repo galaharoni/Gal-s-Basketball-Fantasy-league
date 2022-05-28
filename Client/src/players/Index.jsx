@@ -2,8 +2,12 @@ import React from 'react';
 import { Route, Switch } from 'react-router-dom';
 
 import { List } from './List';
-import { AddEdit } from './AddEdit';
 
+/**
+ * Players: routing to/from players
+ * @param {*} param0 
+ * @returns 
+ */
 function Players({ match }) {
     const { path } = match;
     
@@ -12,8 +16,6 @@ function Players({ match }) {
             <div className="container">
                 <Switch>
                     <Route exact path={`${path}`} component={List} />
-                    <Route path={`${path}/add`} component={AddEdit} />
-                    <Route path={`${path}/edit/:id`} component={AddEdit} />
                 </Switch>
             </div>
         </div>

@@ -5,6 +5,10 @@ import { Role } from '@/_helpers';
 import { accountService } from '@/_services';
 import { teamService } from '@/_services';
 
+/**
+ * Nav: top menu
+ * @returns 
+ */
 function Nav() {
     const [user, setUser] = useState({});
 
@@ -35,6 +39,11 @@ function Nav() {
     );
 }
 
+/**
+ * AdminNav: sub menu
+ * @param {*} param0 
+ * @returns 
+ */
 function AdminNav({ match }) {
     const { path } = match;
 
