@@ -26,6 +26,13 @@
     },    
     "teamBudget":{
         "budget": 250000000,
-        "maxPlayerValue": 50000000
+        "maxPlayerValue": 50000000,
+        "teamSize" : 2
+    },
+    "gameDates":{
+        "startDate": "2021-03-01",
+        "endDate": "2021-07-20"
     }
+
+
 }

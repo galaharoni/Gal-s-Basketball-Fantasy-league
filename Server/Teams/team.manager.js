@@ -4,9 +4,14 @@ const leagueService = require('../Leagues/league.service');
 const teamService = require('./team.service');
 
 module.exports = {
-    joinLeague
+    joinLeague,
+    setPlaces
 };
-
+/**
+ * joinLeague: create league in team
+ * @param  {} leagueId
+ * @param  {} accountId
+ */
 async function joinLeague(leagueId, accountId) {
     // Validate same account not added to a league again
     if (await db.Team.findOne({ where: { leagueId: leagueId, accountId:accountId} })) {
@@ -29,4 +34,26 @@ async function joinLeague(leagueId, accountId) {
         await leagueService.setDraft(league);
     }    
 }
-
+/**
+ * setPlaces: set team places in the league
+ * @param  {} leagueId
+ */
+async function setPlaces(leagueId) {
+    //Set pick
+    //get running leagues
+    const leagues = await leagueService.getRunningLeagues();
+    
+    const unresolvedLeagues = leagues.map(async(league)=> {
+            //for each league set teams places
+            console.log('setPlaces league id:' + league.id);
+            const teams = await teamService.getByLeague(league.id);
+            const unresolvedTeams = teams.map(async (team, idx) => {
+                    console.log('setPlaces id:' + team.id + ' place:' + idx+1);
+                    team.place = idx+1;
+                    await team.save();
+                }
+            )
+            const resolvedTeams = await Promise.all(unresolvedTeams);
+    })
+    const resolvedLeagues = await Promise.all(unresolvedLeagues);
+}    

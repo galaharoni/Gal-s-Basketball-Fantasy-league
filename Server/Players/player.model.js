@@ -1,7 +1,12 @@
 const { DataTypes } = require('sequelize');
 
 module.exports = model;
-
+/**
+ * model: player model
+ * defindes the attributes of the model
+ * 
+ * @param  {} sequelize
+ */
 function model(sequelize) {
     const attributes = {
 
@@ -14,7 +19,8 @@ function model(sequelize) {
         avgTurnovers:  { type: DataTypes.DOUBLE, allowNull: true },
         avgPoints:  { type: DataTypes.DOUBLE, allowNull: true },   
         grade:  { type: DataTypes.DOUBLE, allowNull: true },
-        worth:  { type: DataTypes.DOUBLE, allowNull: true }
+        worth:  { type: DataTypes.DOUBLE, allowNull: true },
+        score:  { type: DataTypes.DOUBLE, allowNull: true }
     };
     const options = {
         defaultScope: {
