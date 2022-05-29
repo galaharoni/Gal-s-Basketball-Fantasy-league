@@ -13,17 +13,9 @@
         "port": 587,
         "auth": {
             "user": "apikey",
-            "pass": "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"
+            "pass": "xxx"
         }
-    },
-    "smtpOptionsBack": {
-        "host": "smtp.ethereal.email",
-        "port": 587,
-        "auth": {
-            "user": "effie.huel90@ethereal.email",
-            "pass": "xv6aN6zXUbqNsvGMWb"
-        }
-    },    
+    },   
     "teamBudget":{
         "budget": 250000000,
         "maxPlayerValue": 50000000,
