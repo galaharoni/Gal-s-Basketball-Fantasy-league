@@ -6,7 +6,7 @@
         "password": "gal2004",
         "database": "gals-fantasy-league"
     },
-    "secret": ">3c;4:pn~7'MTUw*",
+    "secret": "xxx",
     "emailFrom": "gal.aharoni00@gmail.com",
     "smtpOptions": {
         "host": "smtp.sendgrid.net",
