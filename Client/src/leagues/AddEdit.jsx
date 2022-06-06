@@ -19,8 +19,6 @@ function AddEdit({ history, match }) {
         leagueName: '',
         rounds: '',
         teamsCount: '',
-        substitutionCycle: '',
-        publicLeague: 'True',
         leagueMode: 'Create'
     };
 
@@ -28,9 +26,13 @@ function AddEdit({ history, match }) {
     const validationSchema = Yup.object().shape({
         leagueName: Yup.string()
             .required('Name is required'),
-        rounds: Yup.string()
+        rounds: Yup.number()
+            .min(1, 'minimum rounds is 1')
+            .max(10, 'maximum rounds is 10')
             .required('Rounds is required'),
-        teamsCount: Yup.string()
+        teamsCount: Yup.number()
+            .min(2, 'minimum team count is 2')    
+            .max(30, 'maximum team count is 30')
             .required('Max Teams Count is required')
     });
 

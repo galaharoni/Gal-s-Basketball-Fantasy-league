@@ -151,7 +151,7 @@ function List({ match }) {
             </table>                                
             </h5>
             {teamPlayers && viewLeauge && viewLeauge.leagueMode=="Draft" && team.accountId==accountService.userValue.id && viewLeauge.pickingTeam==team.draftPick?<button onClick={() => freeAgents()} className="btn btn-sm btn-success" style={{ whiteSpace: 'nowrap' }}>
-                <span>Sign Free Agents</span>
+                <span>Sign Free Agent</span>
             </button>:""}
             {teamPlayers && viewLeauge && viewLeauge.leagueMode=="Draft" && team.accountId==accountService.userValue.id && viewLeauge.pickingTeam!=team.draftPick?<button onClick={() => toTeamPlayers()} className="btn btn-sm btn-info" style={{ whiteSpace: 'nowrap' }}>
                 <span>Refresh</span>
