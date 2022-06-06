@@ -49,10 +49,11 @@ async function update(id, params) {
     await connection.query(query, [params.currentDate],  (err, rows) => {
         if(err) throw err;  
         console.log(rows);
-    });    
+    }).then(
+        // set team places in leagues
+        await teamManager.setPlaces()
+    );    
 
-    // set team places in leagues
-    await teamManager.setPlaces();
 }
 
 // helper functions

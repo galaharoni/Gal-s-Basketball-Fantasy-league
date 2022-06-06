@@ -6,20 +6,21 @@
         "password": "gal2004",
         "database": "gals-fantasy-league"
     },
-    "secret": "xxx",
+    "secret": ">3c;4:pn~7'MTUw*",
     "emailFrom": "gal.aharoni00@gmail.com",
     "smtpOptions": {
         "host": "smtp.sendgrid.net",
         "port": 587,
         "auth": {
             "user": "apikey",
-            "pass": "xxx"
+            "pass": "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"
         }
-    },   
+    },
+    
     "teamBudget":{
         "budget": 250000000,
         "maxPlayerValue": 50000000,
-        "teamSize" : 2
+        "teamSize" : 5
     },
     "gameDates":{
         "startDate": "2021-03-01",

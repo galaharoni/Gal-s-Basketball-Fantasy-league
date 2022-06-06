@@ -7,6 +7,8 @@ const Role = require('_helpers/role');
 const accountService = require('./account.service');
 
 // routes
+/*
+ */
 router.post('/authenticate', authenticateSchema, authenticate);
 router.post('/refresh-token', refreshToken);
 router.post('/revoke-token', authorize(), revokeTokenSchema, revokeToken);
@@ -22,7 +24,12 @@ router.put('/:id', authorize(), updateSchema, update);
 router.delete('/:id', authorize(), _delete);
 
 module.exports = router;
-
+/**
+ * authenticateSchema: 
+ * @param  {} req
+ * @param  {} res
+ * @param  {} next
+ */
 function authenticateSchema(req, res, next) {
     const schema = Joi.object({
         email: Joi.string().required(),
@@ -30,7 +37,12 @@ function authenticateSchema(req, res, next) {
     });
     validateRequest(req, next, schema);
 }
-
+/**
+ * authenticate:
+ * @param  {} req
+ * @param  {} res
+ * @param  {} next
+ */
 function authenticate(req, res, next) {
     const { email, password } = req.body;
     const ipAddress = req.ip;
@@ -41,7 +53,12 @@ function authenticate(req, res, next) {
         })
         .catch(next);
 }
-
+/**
+ * refreshToken:
+ * @param  {} req
+ * @param  {} res
+ * @param  {} next
+ */
 function refreshToken(req, res, next) {
     const token = req.cookies.refreshToken;
     const ipAddress = req.ip;
@@ -52,14 +69,24 @@ function refreshToken(req, res, next) {
         })
         .catch(next);
 }
-
+/**
+ * revokeTokenSchema:
+ * @param  {} req
+ * @param  {} res
+ * @param  {} next
+ */
 function revokeTokenSchema(req, res, next) {
     const schema = Joi.object({
         token: Joi.string().empty('')
     });
     validateRequest(req, next, schema);
 }
-
+/**
+ * revokeToken:
+ * @param  {} req
+ * @param  {} res
+ * @param  {} next
+ */
 function revokeToken(req, res, next) {
     // accept token from request body or cookie
     const token = req.body.token || req.cookies.refreshToken;
@@ -76,7 +103,12 @@ function revokeToken(req, res, next) {
         .then(() => res.json({ message: 'Token revoked' }))
         .catch(next);
 }
-
+/**
+ * registerSchema:
+ * @param  {} req
+ * @param  {} res
+ * @param  {} next
+ */
 function registerSchema(req, res, next) {
     const schema = Joi.object({
         title: Joi.string().required(),
@@ -89,52 +121,92 @@ function registerSchema(req, res, next) {
     });
     validateRequest(req, next, schema);
 }
-
+/**
+ * register:
+ * @param  {} req
+ * @param  {} res
+ * @param  {} next
+ */
 function register(req, res, next) {
     accountService.register(req.body, req.get('origin'))
         .then(() => res.json({ message: 'Registration successful, please check your email for verification instructions' }))
         .catch(next);
 }
-
+/**
+ * verifyEmailSchema:
+ * @param  {} req
+ * @param  {} res
+ * @param  {} next
+ */
 function verifyEmailSchema(req, res, next) {
     const schema = Joi.object({
         token: Joi.string().required()
     });
     validateRequest(req, next, schema);
 }
-
+/**
+ * verifyEmail:
+ * @param  {} req
+ * @param  {} res
+ * @param  {} next
+ */
 function verifyEmail(req, res, next) {
     accountService.verifyEmail(req.body)
         .then(() => res.json({ message: 'Verification successful, you can now login' }))
         .catch(next);
 }
-
+/**
+ * forgotPasswordSchema:
+ * @param  {} req
+ * @param  {} res
+ * @param  {} next
+ */
 function forgotPasswordSchema(req, res, next) {
     const schema = Joi.object({
         email: Joi.string().email().required()
     });
     validateRequest(req, next, schema);
 }
-
+/**
+ * forgotPassword:
+ * @param  {} req
+ * @param  {} res
+ * @param  {} next
+ */
 function forgotPassword(req, res, next) {
     accountService.forgotPassword(req.body, req.get('origin'))
         .then(() => res.json({ message: 'Please check your email for password reset instructions' }))
         .catch(next);
 }
-
+/**
+ * validateResetTokenSchema:
+ * @param  {} req
+ * @param  {} res
+ * @param  {} next
+ */
 function validateResetTokenSchema(req, res, next) {
     const schema = Joi.object({
         token: Joi.string().required()
     });
     validateRequest(req, next, schema);
 }
-
+/**
+ * validateResetToken:
+ * @param  {} req
+ * @param  {} res
+ * @param  {} next
+ */
 function validateResetToken(req, res, next) {
     accountService.validateResetToken(req.body)
         .then(() => res.json({ message: 'Token is valid' }))
         .catch(next);
 }
-
+/**
+ * resetPasswordSchema:
+ * @param  {} req
+ * @param  {} res
+ * @param  {} next
+ */
 function resetPasswordSchema(req, res, next) {
     const schema = Joi.object({
         token: Joi.string().required(),
@@ -143,30 +215,45 @@ function resetPasswordSchema(req, res, next) {
     });
     validateRequest(req, next, schema);
 }
-
+/**
+ * resetPassword:
+ * @param  {} req
+ * @param  {} res
+ * @param  {} next
+ */
 function resetPassword(req, res, next) {
     accountService.resetPassword(req.body)
         .then(() => res.json({ message: 'Password reset successful, you can now login' }))
         .catch(next);
 }
-
+/**
+ * getAll:
+ * @param  {} req
+ * @param  {} res
+ * @param  {} next
+ */
 function getAll(req, res, next) {
     accountService.getAll()
         .then(accounts => res.json(accounts))
         .catch(next);
 }
-
+/**
+ * getById:
+ * @param  {} req
+ * @param  {} res
+ * @param  {} next
+ */
 function getById(req, res, next) {
-    // users can get their own account and admins can get any account
-    if (Number(req.params.id) !== req.user.id && req.user.role !== Role.Admin) {
-        return res.status(401).json({ message: 'Unauthorized' });
-    }
-
     accountService.getById(req.params.id)
         .then(account => account ? res.json(account) : res.sendStatus(404))
         .catch(next);
 }
-
+/**
+ * createSchema:
+ * @param  {} req
+ * @param  {} res
+ * @param  {} next
+ */
 function createSchema(req, res, next) {
     const schema = Joi.object({
         title: Joi.string().required(),
@@ -179,13 +266,23 @@ function createSchema(req, res, next) {
     });
     validateRequest(req, next, schema);
 }
-
+/**
+ * create:
+ * @param  {} req
+ * @param  {} res
+ * @param  {} next
+ */
 function create(req, res, next) {
     accountService.create(req.body)
         .then(account => res.json(account))
         .catch(next);
 }
-
+/**
+ * updateSchema:
+ * @param  {} req
+ * @param  {} res
+ * @param  {} next
+ */
 function updateSchema(req, res, next) {
     const schemaRules = {
         title: Joi.string().empty(''),
@@ -204,7 +301,12 @@ function updateSchema(req, res, next) {
     const schema = Joi.object(schemaRules).with('password', 'confirmPassword');
     validateRequest(req, next, schema);
 }
-
+/**
+ * update:
+ * @param  {} req
+ * @param  {} res
+ * @param  {} next
+ */
 function update(req, res, next) {
     // users can update their own account and admins can update any account
     if (Number(req.params.id) !== req.user.id && req.user.role !== Role.Admin) {
@@ -215,7 +317,12 @@ function update(req, res, next) {
         .then(account => res.json(account))
         .catch(next);
 }
-
+/**
+ * _delete:
+ * @param  {} req
+ * @param  {} res
+ * @param  {} next
+ */
 function _delete(req, res, next) {
     // users can delete their own account and admins can delete any account
     if (Number(req.params.id) !== req.user.id && req.user.role !== Role.Admin) {
@@ -228,7 +335,11 @@ function _delete(req, res, next) {
 }
 
 // helper functions
-
+/**
+ * setTokenCookie:
+ * @param  {} res
+ * @param  {} token
+ */
 function setTokenCookie(res, token) {
     // create cookie with refresh token that expires in 7 days
     const cookieOptions = {

@@ -118,7 +118,7 @@ function updateSchema(req, res, next) {
         leagueName: Joi.string().required(),
         rounds: Joi.number().required(),
         teamsCount: Joi.number().required(),
-        leagueMode: Joi.string().valid(leagueMode.Create, leagueMode.Draft, leagueMode.Run, leagueMode.Substitutaions, leagueMode.Close).required()
+        leagueMode: Joi.string().valid(leagueMode.Create, leagueMode.Draft, leagueMode.Run, leagueMode.Close).required()
     });
     validateRequest(req, next, schema);
 }
