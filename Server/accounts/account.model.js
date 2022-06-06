@@ -1,7 +1,11 @@
 const { DataTypes } = require('sequelize');
 
 module.exports = model;
-
+/**
+ * model: game date model
+ * defindes the attributes of the model
+ * @param  {} sequelize
+ */
 function model(sequelize) {
     const attributes = {
         email: { type: DataTypes.STRING, allowNull: false },

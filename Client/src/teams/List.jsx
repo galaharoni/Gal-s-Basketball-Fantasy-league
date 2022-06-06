@@ -87,10 +87,9 @@ function List({ match }) {
             {isMyTeams?<h1>My Teams</h1>:<h1> Teams of league: {viewLeauge?viewLeauge.leagueName:""}</h1>}
             {isMyTeams?<br></br>:<h4>Leauge Mode: {viewLeauge?viewLeauge.leagueMode:""}</h4>}
             {!isMyTeams && viewLeauge && viewLeauge.leagueMode=='Close'&&teams?<h4 className="text-center btn-info" style={{width: '100%'}}>THE WINNER IS: {teams?teams[0].account.firstName + " " + teams[0].account.lastName:""}</h4>:""}
-
             {!isMyTeams && myTeam && myTeam.length===0 && viewLeauge && teams && viewLeauge.teamsCount > teams.length ?<button onClick={() => joinLeague(leagueid)} className="btn btn-sm btn-success" style={{ whiteSpace: 'nowrap' }} disabled={false}>
                 <span>Join League</span>
-            </button>:<div></div>}
+            </button>:""}
             <table className="table table-striped">
                 <thead>
                     <tr>
@@ -106,7 +105,7 @@ function List({ match }) {
                     {teams && teams.map(team =>
                         <tr key={team.id}>
                             <td style={{ whiteSpace: 'nowrap' }}>{isMyTeams&&team?team.League.leagueName: team.account.firstName + " " + team.account.lastName}</td>
-                            <td>{team.draftPick+1}</td>
+                            <td>{team.draftPick!=null?team.draftPick+1:''}</td>
                             <td>{currencyFormat(team.budget)}</td>
                             <td>{team.score?parseFloat(team.score).toFixed(2):''}</td>
                             <td>{(team.place!=9999)?team.place:''}</td>

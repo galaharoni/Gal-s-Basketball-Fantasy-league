@@ -22,10 +22,16 @@ module.exports = {
     update,
     delete: _delete
 };
-
+/**
+ * authenticate: verify the user password 
+ * @param  {} {email
+ * @param  {} password
+ * @param  {} ipAddress}
+ */
 async function authenticate({ email, password, ipAddress }) {
+    // get account from data base according to email
     const account = await db.Account.scope('withHash').findOne({ where: { email } });
-
+    // hash the input password and compare it the hashed password in the data base
     if (!account || !account.isVerified || !(await bcrypt.compare(password, account.passwordHash))) {
         throw 'Email or password is incorrect';
     }
@@ -44,7 +50,11 @@ async function authenticate({ email, password, ipAddress }) {
         refreshToken: refreshToken.token
     };
 }
-
+/**
+ * refreshToken
+ * @param  {} {token
+ * @param  {} ipAddress}
+ */
 async function refreshToken({ token, ipAddress }) {
     const refreshToken = await getRefreshToken(token);
     const account = await refreshToken.getAccount();
@@ -67,7 +77,11 @@ async function refreshToken({ token, ipAddress }) {
         refreshToken: newRefreshToken.token
     };
 }
-
+/**
+ * revokeToken:
+ * @param  {} {token
+ * @param  {} ipAddress}
+ */
 async function revokeToken({ token, ipAddress }) {
     const refreshToken = await getRefreshToken(token);
 
@@ -76,7 +90,11 @@ async function revokeToken({ token, ipAddress }) {
     refreshToken.revokedByIp = ipAddress;
     await refreshToken.save();
 }
-
+/**
+ * register:
+ * @param  {} params
+ * @param  {} origin
+ */
 async function register(params, origin) {
     // validate
     if (await db.Account.findOne({ where: { email: params.email } })) {
@@ -101,7 +119,10 @@ async function register(params, origin) {
     // send email
     await sendVerificationEmail(account, origin);
 }
-
+/**
+ * verifyEmail:
+ * @param  {} {token}
+ */
 async function verifyEmail({ token }) {
     const account = await db.Account.findOne({ where: { verificationToken: token } });
 
@@ -111,7 +132,11 @@ async function verifyEmail({ token }) {
     account.verificationToken = null;
     await account.save();
 }
-
+/**
+ * forgotPassword:
+ * @param  {} {email}
+ * @param  {} origin
+ */
 async function forgotPassword({ email }, origin) {
     const account = await db.Account.findOne({ where: { email } });
 
@@ -126,7 +151,10 @@ async function forgotPassword({ email }, origin) {
     // send email
     await sendPasswordResetEmail(account, origin);
 }
-
+/**
+ * validateResetToken:
+ * @param  {} {token}
+ */
 async function validateResetToken({ token }) {
     const account = await db.Account.findOne({
         where: {
@@ -139,7 +167,11 @@ async function validateResetToken({ token }) {
 
     return account;
 }
-
+/**
+ * resetPassword:
+ * @param  {} {token
+ * @param  {} password}
+ */
 async function resetPassword({ token, password }) {
     const account = await validateResetToken({ token });
 
@@ -149,17 +181,25 @@ async function resetPassword({ token, password }) {
     account.resetToken = null;
     await account.save();
 }
-
+/**
+ * getAll:
+ */
 async function getAll() {
     const accounts = await db.Account.findAll();
     return accounts.map(x => basicDetails(x));
 }
-
+/**
+ * getById:
+ * @param  {} id
+ */
 async function getById(id) {
     const account = await getAccount(id);
     return basicDetails(account);
 }
-
+/**
+ * create:
+ * @param  {} params
+ */
 async function create(params) {
     // validate
     if (await db.Account.findOne({ where: { email: params.email } })) {
@@ -177,7 +217,11 @@ async function create(params) {
 
     return basicDetails(account);
 }
-
+/**
+ * update:
+ * @param  {} id
+ * @param  {} params
+ */
 async function update(id, params) {
     const account = await getAccount(id);
 
@@ -198,35 +242,54 @@ async function update(id, params) {
 
     return basicDetails(account);
 }
-
+/**
+ * _delete:
+ * @param  {} id
+ */
 async function _delete(id) {
     const account = await getAccount(id);
     await account.destroy();
 }
 
 // helper functions
-
+/**
+ * getAccount:
+ * @param  {} id
+ */
 async function getAccount(id) {
     const account = await db.Account.findByPk(id);
     if (!account) throw 'Account not found';
     return account;
 }
-
+/**
+ * getRefreshToken:
+ * @param  {} token
+ */
 async function getRefreshToken(token) {
     const refreshToken = await db.RefreshToken.findOne({ where: { token } });
     if (!refreshToken || !refreshToken.isActive) throw 'Invalid token';
     return refreshToken;
 }
-
+/**
+ * hash:
+ * @param  {} password
+ */
 async function hash(password) {
     return await bcrypt.hash(password, 10);
 }
-
+/**
+ * generateJwtToken:
+ * @param  {} account
+ */
 function generateJwtToken(account) {
     // create a jwt token containing the account id that expires in 15 minutes
     return jwt.sign({ sub: account.id, id: account.id }, config.secret, { expiresIn: '15m' });
 }
-
+/**
+ * generateRefreshToken:
+ * @param  {} account
+ * @param  {} ipAddress
+ */
 function generateRefreshToken(account, ipAddress) {
     // create a refresh token that expires in 7 days
     return new db.RefreshToken({
@@ -236,12 +299,19 @@ function generateRefreshToken(account, ipAddress) {
         createdByIp: ipAddress
     });
 }
-
+/**
+ * basicDetails:
+ * @param  {} account
+ */
 function basicDetails(account) {
     const { id, title, firstName, lastName, email, role, created, updated, isVerified } = account;
     return { id, title, firstName, lastName, email, role, created, updated, isVerified };
 }
-
+/**
+ * sendVerificationEmail:
+ * @param  {} account
+ * @param  {} origin
+ */
 async function sendVerificationEmail(account, origin) {
     let message;
     if (origin) {
@@ -261,7 +331,11 @@ async function sendVerificationEmail(account, origin) {
                ${message}`
     });
 }
-
+/**
+ * sendAlreadyRegisteredEmail:
+ * @param  {} email
+ * @param  {} origin
+ */
 async function sendAlreadyRegisteredEmail(email, origin) {
     let message;
     if (origin) {
@@ -278,7 +352,11 @@ async function sendAlreadyRegisteredEmail(email, origin) {
                ${message}`
     });
 }
-
+/**
+ * sendPasswordResetEmail:
+ * @param  {} account
+ * @param  {} origin
+ */
 async function sendPasswordResetEmail(account, origin) {
     let message;
     if (origin) {

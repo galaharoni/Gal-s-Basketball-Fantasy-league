@@ -81,12 +81,12 @@ async function addPlayer(id, teamId) {
     /*
      * remove player from team
      */
-   const player = await getPlayer(id);
+   const player = await playerService.getPlayer(id);
    if (player.teamId != teamId || player.teamId == null)
        throw 'player is not in the team'
 
     const league = await leagueService.getById(player.leagueId);
-    if (league.mode!=leagueMode.Draft){
+    if (league.leagueMode!=leagueMode.Draft){
         console.log('removePlayer League is not in Draft mode');    
         throw 'League is not in Draft mode. Please refresh.';
     }

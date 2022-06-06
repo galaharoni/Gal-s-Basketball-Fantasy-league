@@ -81,9 +81,6 @@ async function create(req) {
 
     const league = new db.League(params);
 
-    // leauge code
-    league.leagueCode = randomTokenString()
-
     league.accountId = req.user.id; //accountid of logged-in user
 
     // Teams
@@ -115,19 +112,14 @@ async function update(id, params) {
     // copy params to league and save
     Object.assign(league, params);
     await league.save();
-
-    //initiate draft if manually moved to draft
-    if (params.leagueMode == LeagueMode.Draft) {
-        setDraft(league);
-    }
 }
 /** 
  * _delete: delete league
  * @param  {} id
  */
 async function _delete(id) {
-    const user = await getLeague(id);
-    await user.destroy();
+    const league = await getLeague(id);
+    await league.destroy();
 }
 
 /**

@@ -38,7 +38,10 @@ async function getByLeagueNaccount(leagueId, accountId) {
         where: 
             {leagueId: leagueId, 
             accountId: accountId},
-        include: [db.Account]    
+        include: [{
+            model: db.Account,
+            attributes: ['firstName', 'lastName']
+        }]
     });
 }
 /**
@@ -48,7 +51,10 @@ async function getByLeagueNaccount(leagueId, accountId) {
 async function getByLeague(leagueId) {
     return await db.Team.findAll({
         where: {leagueId: leagueId},
-        include: [db.Account],
+        include: [{
+            model: db.Account,
+            attributes: ['firstName', 'lastName']
+        }],
         order: [['score', 'DESC'],['draftPick','ASC']]
     });
 }

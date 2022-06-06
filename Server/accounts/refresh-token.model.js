@@ -1,7 +1,9 @@
 const { DataTypes } = require('sequelize');
 
 module.exports = model;
-
+/**
+ * @param  {} sequelize
+ */
 function model(sequelize) {
     const attributes = {
         token: { type: DataTypes.STRING },
