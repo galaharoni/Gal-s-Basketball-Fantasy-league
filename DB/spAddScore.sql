@@ -1,10 +1,18 @@
 DELIMITER $$
-DROP PROCEDURE IF EXISTS spAddScore;
+#DROP PROCEDURE IF EXISTS spAddScore;
 CREATE PROCEDURE spAddScore(IN endDate datetime)
 BEGIN
 
 # the league start Date is current date
 DECLARE startDate datetime;
+DECLARE finished INT;
+DECLARE runningLeagueId INT;
+-- declare cursor for running leagues
+DEClARE curRunLeagues CURSOR FOR 
+		SELECT id FROM leagues where leagueMode = 'Run';
+-- declare NOT FOUND handler
+DECLARE CONTINUE HANDLER 
+	FOR NOT FOUND SET finished = 1;
 
 SELECT currentDate
 into startDate  
@@ -55,6 +63,25 @@ set
 	p.avgPoints = s.avgPoints 
 where p.playerId = s.playerId;
 
+# Update places for all running leagugs
+OPEN curRunLeagues;
+
+getLeague: LOOP
+	FETCH curRunLeagues INTO runningLeagueId;
+	IF finished = 1 THEN 
+		LEAVE getLeague;
+	END IF;
+
+	#update places
+	SET @rownumber = 0;    
+	update teams 
+    set place = (@rownumber:=@rownumber+1)
+    where leagueId = runningLeagueId
+	order by score desc;   
+
+END LOOP getLeague;
+CLOSE curRunLeagues;
+
 #update current round in leagus
 update leagues
 set currentRound = ifnull(currentRound, 0) + 1
@@ -69,6 +96,7 @@ and currentRound=Rounds;
 #update currentDate
 update gamedates
 set currentDate = endDate; 
+
 
 END$$
 
